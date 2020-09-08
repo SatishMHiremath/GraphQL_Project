@@ -37,7 +37,8 @@ type Query {
     retrieveAuthor(id: ID!):Author 
 }
 type Mutation{
-    createAuthor(name: String!, gender: String!):Author
+    createAuthor(name: String!, gender: String!, age: Int):Author
+    updateAuthor(id:ID!, name: String, gender: String, age: Int):Author
 }
 `;
 
@@ -52,18 +53,36 @@ const resolvers = {
     Mutation: {
         createAuthor:(obj, args) => {
             const id = String(authors.length+1);
-            const { name, gender } = args;
+            const { name, gender, age } = args;
 
             const newAuthor = {
                 id,
                 info: {
                     name,
-                    gender 
+                    gender,
+                    age
                 }
             }
             authors.push(newAuthor);
             return newAuthor;
-        }
+        },
+        updateAuthor: (obj, {id, name, gender, age}) => {
+            const author = authors.find(author => author.id === id);
+            if(author) {
+                const authorIndex = authors.indexOf(author);
+
+                if(name) author.info.name = name;
+            
+                if(name)  author.info.age = age;
+                
+                if(name) author.info.gender = gender;
+
+                authors[authorIndex] = {id, info: author};  
+                return {id, info: author}
+            }else {
+                throw new Error("Author ID not found");
+            }
+        } 
     }
 };
 
