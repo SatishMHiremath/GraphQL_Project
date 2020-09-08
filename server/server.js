@@ -36,9 +36,14 @@ type Query {
     getAuthors: [ Author ]
     retrieveAuthor(id: ID!):Author 
 }
+type DeleteMessage{
+    id:ID!
+    message:String
+}
 type Mutation{
     createAuthor(name: String!, gender: String!, age: Int):Author
     updateAuthor(id:ID!, name: String, gender: String, age: Int):Author
+    deleteAuthor(id: ID!):DeleteMessage
 }
 `;
 
@@ -82,7 +87,21 @@ const resolvers = {
             }else {
                 throw new Error("Author ID not found");
             }
-        } 
+        },
+        deleteAuthor: (obj, {id}) => {
+            const author = authors.find(author => author.id === id);
+            if(author) {
+                const authorIndex = authors.indexOf(author);
+                authors.splice(authorIndex, 1);
+                return {
+                    id, 
+                    message:`Author with id ${id} deleted successfully.`
+                };
+            }
+            else {
+                throw new Error("Author ID not found");
+            }
+        }
     }
 };
 
