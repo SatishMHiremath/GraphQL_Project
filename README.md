@@ -1,9 +1,11 @@
 # GraphQL_Project
 GraphQL concepts:
 
-server\server.js
+server\server.js>
 npm init
+
 npm install express apollo-server-express
+
 npm install graphql core-js
 
 To Start client side Application :- 
